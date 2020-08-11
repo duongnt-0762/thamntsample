@@ -1,10 +1,15 @@
 class UsersController < ApplicationController
+	before_action :find_user, only: [:show , :edit, :update, :destroy, :correct_user]
+	before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+	before_action :correct_user, only: [:edit, :update]
+	before_action :admin_user, only: :destroy
+
+	def index
+		@users = User.paginate(page: params[:page])
+	end
+
 	def show
-		@user = User.find_by id: params[:id]
-	 	if @user.nil?
-			flash[:danger] = "can't find user!"
-			redirect_to root_path
-		end
+		@microposts = @user.microposts.paginate(page: params[:page]) 	
 	end
 
 	def new
@@ -14,6 +19,7 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new user_params
 		if @user.save
+			log_in @user
 			flash[:success] = "Welcome to the Sample App!"
 			redirect_to @user
 		else
@@ -21,10 +27,54 @@ class UsersController < ApplicationController
 		end
 	end
 
-	private
-	def user_params
-		params.require(:user).permit(:name, :email, :password, :password_confirmation)
+	def edit
 	end
+
+	def update
+		if @user.update(user_params)
+			flash[:success] = "Profile updated"
+			redirect_to @user
+		else
+			render :edit
+		end
+	end
+
+	def destroy
+		@user.destroy
+		flash[:success] = "User deleted"
+		redirect_to users_url
+	end
+
+	private
+
+		def find_user
+			@user = User.find_by id: params[:id]
+			if @user.nil?
+				flash[:danger] = "can't find user!"
+				redirect_to root_path
+			end
+		end
+
+		def user_params
+			params.require(:user).permit(:name, :email, :password, :password_confirmation)
+		end
+
+		# Confirms a logged-in user.
+		def logged_in_user
+			unless logged_in?
+				flash[:danger] = "Please log  in."
+				redirect_to login_url
+			end
+		end
+
+		# Confirms the correct user.
+		def correct_user
+			redirect_to(root_url) unless current_user.current_user?(@user)
+		end
+
+		def admin_user
+			redirect_to(root_url) unless current_user.admin?
+		end
 end
 
 

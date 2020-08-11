@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+	has_many :microposts, dependent: :destroy
 	attr_accessor :remember_token
 	before_save :downcase_email
 	validates :name, presence: true, length: { maximum: 50 }
@@ -37,11 +38,37 @@ class User < ApplicationRecord
 
 	def forget
 		update_attributes remember_digest: nil
-	end			
+	end	
+
+
+	def current_user?(user)
+		user && user == self
+	end		
+
+	def feed
+		Micropost.where("user_id = ?", id)
+	end
 
 	private
 	
-	def downcase_email
-	  self.email = email.downcase 
-	end		  
+		def downcase_email
+		  self.email = email.downcase 
+		end		  
+end
+
+
+class Micropost < ApplicationRecord
+	belongs_to :user
+	has_one_attached :image
+	default_scope -> { order(created_at: :desc) }
+	validates :user_id, presence: true
+	validates :content, presence: true, length: { maximum: 140 }
+	validates :image, content_type: { in: %w[image/jpeg image/gif image/png],
+									  message: "must be a valid image format" },
+					  size: { less_than: 5.megabytes,
+							  message: "should be less than 5MB" }
+	# Returns a resized image for display.
+	def display_image
+		image.variant(resize_to_limit: [500, 500])
+	end
 end
