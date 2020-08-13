@@ -1,12 +1,27 @@
-<header class="navbar navbar-fixed-top navbar-inverse">
-	<div class="container">
-		<%= link_to "sample app", '#', id: "logo" %>
-		<nav>
-			<ul class="nav navbar-nav navbar-right">
-				<li><%= link_to "Home", '#' %></li>
-				<li><%= link_to "Help", '#' %></li>
-				<li><%= link_to "Log in", '#' %></li>
-			</ul>
-		</nav>
-	</div>
+<header class="site-header fixed-top bg-black border-bottom border-dark">
+    <div class="container">
+
+        <!-- Navbar -->
+        <nav class="navbar main-nav navbar-expand-lg navbar-dark" aria-label="Main navigation">
+            <a href="index.html" class="navbar-brand d-inline-flex text-uppercase">sample app </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" 
+            aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse text-uppercase" id="navbarContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="pages.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="style.html" class="nav-link">Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="docs/index.html" class="nav-link">Log in</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
 </header>
+
