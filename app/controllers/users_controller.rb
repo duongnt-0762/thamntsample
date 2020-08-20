@@ -5,7 +5,6 @@ class UsersController < ApplicationController
 			flash[:danger] = "can't find user!"
 			redirect_to root_path
 		end
-
 	end
 
 	def new
@@ -23,9 +22,9 @@ class UsersController < ApplicationController
 	end
 
 	private
-		def user_params
-			params.require(:user).permit(:name, :email, :password, :password_confirmation)
-		end
+	def user_params
+		params.require(:user).permit(:name, :email, :password, :password_confirmation)
+	end
 end
 
 
