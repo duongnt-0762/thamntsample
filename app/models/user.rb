@@ -37,7 +37,12 @@ class User < ApplicationRecord
 
 	def forget
 		update_attributes remember_digest: nil
-	end			
+	end	
+
+
+	def current_user?(user)
+		user && user == self
+	end		
 
 	private
 	
