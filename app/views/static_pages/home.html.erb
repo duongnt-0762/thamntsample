@@ -1,4 +1,20 @@
 <% provide(:title, "Home") %>
+<% if logged_in? %>
+    <div class="row">
+        <aside class="col-md-4">
+            <section class="user_info">
+                <%= render 'shared/user_info' %>
+            </section>
+            <section class="micropost_form">
+                <%= render 'shared/micropost_form' %>
+            </section>
+        </aside>
+        <div class="col-md-8">
+            <h3>Micropost Feed</h3>
+            <%= render 'shared/feed' %>
+        </div>
+    </div>
+<% else %>
 <div class="container py-5">
     <h1 class="display-2 pb-2">Welcome to the Sample App</h1>
     <hr class="border-3 border-white my-4 ml-0 text-left w-25" role="presentation">
@@ -13,3 +29,4 @@
     </div>
     <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
 </div>
+<% end %>

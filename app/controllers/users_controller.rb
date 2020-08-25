@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 	end
 
 	def show
+		@microposts = @user.microposts.paginate(page: params[:page]) 
 	end
 
 	def new
@@ -46,6 +47,14 @@ class UsersController < ApplicationController
 
 	private
 
+		def find_user
+			@user = User.find_by id: params[:id]
+			if @user.nil?
+				flash[:danger] = "can't find user!"
+				redirect_to root_path
+			end
+		end
+
 		def user_params
 			params.require(:user).permit(:name, :email, :password, :password_confirmation)
 		end
@@ -65,14 +74,6 @@ class UsersController < ApplicationController
 
 		def admin_user
 			redirect_to(root_url) unless current_user.admin?
-		end
-
-		def find_user
-			@user = User.find_by id: params[:id]
-			if @user.nil?
-				flash[:danger] = "can't find user!"
-				redirect_to root_path
-			end
 		end
 end
 
