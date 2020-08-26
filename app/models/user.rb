@@ -1,5 +1,6 @@
 class User < ApplicationRecord
 	attr_accessor :remember_token
+	has_many :microposts, dependent: :destroy
 	before_save :downcase_email
 	validates :name, presence: true, length: { maximum: 50 }
 	VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -44,9 +45,19 @@ class User < ApplicationRecord
 		user && user == self
 	end		
 
+	def feed
+		self.microposts
+	end
+
 	private
-	
+
+
 	def downcase_email
+		def downcase_email
 	  self.email = email.downcase 
-	end		  
+		  self.email = email.downcase 	  
+		end		  
+	end
 end
+
+
